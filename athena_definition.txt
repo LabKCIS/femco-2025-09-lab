@@ -1,0 +1,39 @@
+CREATE EXTERNAL TABLE `iot_data`(
+  `equipment_name` string, 
+  `sensor_name` string, 
+  `sensor_value` double, 
+  `log_time` timestamp, 
+  `anomaly_flag` string, 
+  `relative_humidity` double, 
+  `production_status` string, 
+  `shift` string, 
+  `coil_start_time` timestamp, 
+  `coil_end_time` timestamp, 
+  `product_specification` string, 
+  `pipe_outer_diameter` string, 
+  `pipe_thickness` string, 
+  `pipe_type` string, 
+  `pipe_standard` string, 
+  `coil_thickness` string, 
+  `coil_width` string, 
+  `coil_material` string)
+PARTITIONED BY ( 
+  `t_open_date` date)
+ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY ',' 
+STORED AS INPUTFORMAT 
+  'org.apache.hadoop.mapred.TextInputFormat' 
+OUTPUTFORMAT 
+  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+  's3://xxxxx/gz'
+TBLPROPERTIES (
+  'compression.type'='GZIP', 
+  'projection.enabled'='true', 
+  'projection.t_open_date.format'='yyyy-MM-dd', 
+  'projection.t_open_date.interval'='1', 
+  'projection.t_open_date.interval.unit'='DAYS', 
+  'projection.t_open_date.range'='2020-01-01,NOW', 
+  'projection.t_open_date.type'='date', 
+  'skip.header.line.count'='1', 
+  'transient_lastDdlTime'='1754373768')
